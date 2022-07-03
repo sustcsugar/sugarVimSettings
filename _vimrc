@@ -34,7 +34,10 @@ set winaltkeys=no           " 设置 alt 键不映射到菜单栏
 set cursorline              "设置光标行高亮
 set hlsearch
 set scrolloff=5            "移动光标时,始终保留上下五行
+set list                      " 显示不可见字符, tab和换行符
+set listchars=tab:>-,trail:.  " 将tab和换行符显示的符号修改,同时修改行尾空格trail为.
 " }}}
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 代码缩进与排版
@@ -57,7 +60,7 @@ set softtabstop=4    "设置4个空格为制表符
 set encoding=utf-8
 set langmenu=zh_CN
 let $LANG = 'en_US.UTF-8'
-"language messages zh_CN.UTF-8
+"language messages zh_CN.UTF-8   "显示中文消息
 " }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -76,7 +79,7 @@ source $VIMRUNTIME/menu.vim
 
 " 窗口大小
 set lines=50 columns=140
-winpos 700 100
+"winpos 700 100
 " 分割出来的窗口位于当前窗口下边/右边
 set splitbelow
 set splitright
