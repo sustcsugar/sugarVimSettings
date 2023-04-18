@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =7
+let g:netrw_dirhist_7='/etc'
+let g:netrw_dirhist_6='/Users/sugar/.oh-my-zsh'
+let g:netrw_dirhist_5='/Users/sugar/work/python/stable-diffusion-webui/extensions'
+let g:netrw_dirhist_4='/Users/sugar/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/7881c2236c4e2699e48f7e0da80aecb5/Message/MessageTemp/c2583a6c03077ccff494175a211f383d/File/MCU51-winphy/rtl/pid'
+let g:netrw_dirhist_3='/Users/sugar/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/7881c2236c4e2699e48f7e0da80aecb5/Message/MessageTemp/c2583a6c03077ccff494175a211f383d/File/MCU51-winphy/rtl'
+let g:netrw_dirhist_2='/Users/sugar/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/7881c2236c4e2699e48f7e0da80aecb5/Message/MessageTemp/c2583a6c03077ccff494175a211f383d/File/MCU51-winphy'
+let g:netrw_dirhist_1='/Users/sugar/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/7881c2236c4e2699e48f7e0da80aecb5/Message/MessageTemp/c2583a6c03077ccff494175a211f383d/File/MCU51-winphy/model'
