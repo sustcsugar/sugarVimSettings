@@ -68,34 +68,28 @@ let $LANG = 'en_US.UTF-8'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " GUI {{{
 " 设置主题格式
-colorscheme solarized
+colorscheme tender
 "colorscheme gruvbox
 "set guifont=Courier_New:h13
-"set guifont=Inconsolata:h13
-if has('win32')
-    set guifont=Monaco:h14
-elseif has('unix')
-    set guifont=Monaco:h14
-elseif has('mac')
-    set guifont=Monaco:h14
-endif
+set guifont=Inconsolata:h13
 
 " 解决菜单乱码问题
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
 " 窗口大小
-" set lines=50 columns=140
+
+"set lines=50 columns=140
 "winpos 700 100
 " 分割出来的窗口位于当前窗口下边/右边
 set splitbelow
 set splitright
 "不显示工具/菜单栏
-set guioptions-=T
-set guioptions-=m
-set guioptions-=L
-set guioptions-=r
-set guioptions-=b
+" set guioptions-=T
+" set guioptions-=m
+" set guioptions-=L
+" set guioptions-=r
+" set guioptions-=b
 
 " 使用内置 tab 样式而不是 gui
 "set guioptions-=e
@@ -114,14 +108,13 @@ inoremap jk <Esc>
 nnoremap <leader>f *
 nnoremap <leader>e :e $MYVIMRC<cr>
 nnoremap <leader>r :source $MYVIMRC<cr>
+nnoremap sp :sp<cr>
+nnoremap vs :vs<cr>
 
-nnoremap L $
 nnoremap H ^
-vnoremap L $
-vnoremap H ^
-onoremap L $
-onoremap H ^
-
+nnoremap L $
+omap H ^
+omap L $
 
 " 快速切换窗口
 nnoremap <C-h> <C-w>h
@@ -129,8 +122,8 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 " 切换buffer
-nnoremap <leader>x :bprev<cr>
-nnoremap <leader>z :bnext<cr>
+nnoremap <M-h> :bprev<cr>
+nnoremap <M-l> :bnext<cr>
 " 插入模式移动光标 alt + 方向键
 "inoremap <M-j> <Down>
 "inoremap <M-k> <Up>
@@ -142,8 +135,11 @@ map <up> :res +5<CR>
 map <down> :res -5<CR>
 map <left> :vertical resize-5<CR>
 map <right> :vertical resize+5<CR>
-" }}}
 
+
+map <leader>x :bnext<CR>
+map <leader>z :bprev<CR>
+" }}}
 
 " 添加作者信息 {{{
 "第一部分
@@ -200,65 +196,202 @@ endfunction
 
 " }}}
 
+" alias {{{
+"Hot key for comments
+ab ccc   //-----------------------------------------------------------------------------------
+ab ccl*  *************************************************************************************
+ab ccl=  =====================================================================================
+ab ccl#  #------------------------------------------------------------------------------------
+ab ccl+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ab ccl-  -------------------------------------------------------------------------------------
+ab ccs   //-------------------------------------
+ab cc+   +++++++++++++++++++++++++++++++++++++++
+ab cc=   =======================================
+ab cc*   ***************************************
+ab cc-   ---------------------------------------
+ab cc#   #--------------------------------------
+" }}}
 
-" Plugin Settings {{{
-call plug#begin() " The default plugin directory will be as follows:
-"   - Vim (Linux/macOS): '~/.vim/plugged'
-"   - Vim (Windows): '~/vimfiles/plugged'
-"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
-" You can specify a custom plugin directory by passing it as the argument
-"   - e.g. `call plug#begin('~/.vim/plugged')`
-"   - Avoid using standard Vim directory names like 'plugin'
 
-" Make sure you use single quotes
+"  functions {{{
+" this abbreviation %% expands to the full path of the directory that contains
+" the current file. For example, while editing file /some/path/myfile.txt,
+" typing: e %%/ on the command line will expand to :e /some/path/.
+cabbr <expr> %% expand('%:p:h') 
 
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-Plug 'junegunn/vim-easy-align'
 
-" Any valid git URL is allowed
-" Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 
-" Multiple Plug commands can be written in a single line using | separators
-"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+"Self-defined function Cnt_match to count and show the matched search_wd
+function Cnt_match(search_wd)
+   let cnt = 0 
+   let i = 1 
+   let cur_line = line(".")
+   normal G
+   let last_lie = line(".")
+   echo "Searching ... " a:search_wd
 
-" On-demand loading
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+   normal gg
 
-" Using a non-default branch
-"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+   while search(a:search_wd,"W") > 0 
+      echo "Yes ... Line".line(".")."  >::>::>".getline(".")
+      let cnt = cnt + 1
+   endwhile
 
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-"Plug 'fatih/vim-go', { 'tag': '*' }
 
-" Plugin options
-"Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+   echo "Match Counter : ". cnt
+   execute cur_line
+endfunction
 
-" Plugin outside ~/.vim/plugged with post-update hook
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-" Unmanaged plugin (manually installed and updated)
-"Plug '~/my-prototype-plugin'
 
-" Initialize plugin system
-" - Automatically executes `filetype plugin indent on` and `syntax enable`.
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+"Self-defined function Clum_i to insert number to signal list
+"This is helpful to name huge signal list with number
+function Clum_i(start,end,span)
+   let cnt = a:start
+   let line_num = line(".")
+   let clum_num = col(".")
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-call plug#end()
-" You can revert the settings after the call like so:
-"   filetype indent off   " Disable file-type-specific indentation
-"   syntax off            " Disable syntax highlighting
+   while cnt <= a:end
+      execute "normal i".cnt."\<ESC>"
+      let line_num = line_num + a:span + 1 
+      call cursor(line_num,clum_num)
+      let cnt = cnt + 1
+   endwhile
+endfunction;
+" }}}
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vundle插件设置  使用 :PluginInstall即可安装列表中的插件
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vundle插件环境设置 {{{
+filetype off
+set rtp+=~/vimfiles/bundle/Vundle.vim
+
+call vundle#rc('~/vimfiles/bundle/')
+" vundle管理的插件列表必须位于vundle#begin()和vundle#end()之间
+call vundle#begin()
+" 插件管理插件
+Plugin 'VundleVim/Vundle.vim'
+" 主题
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'jacoborus/tender.vim'
+Plugin 'morhetz/gruvbox'
+
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+Plugin 'scrooloose/nerdtree'
+Plugin 'neoclide/coc.nvim'
+Plugin 'honza/vim-snippets'
+" git plugins
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-fugitive'
+Plugin 'junegunn/gv.vim'
+" 插件列表结束
+call vundle#end()
+filetype plugin indent on
+" }}}
+
+
+" @airline{{{
+
+
+set t_Co=256      "在windows中用xshell连接打开vim可以显示色彩
+"这个是安装字体后 必须设置此项" 
+set guifont=Consolas_for_Powerline_FixedD:h13:cANSI:qDRAFT
+let g:airline_powerline_fonts = 1
+set laststatus=2  "永远显示状态栏
+let g:airline_theme='bubblegum' "选择主题
+let g:airline#extensions#tabline#enabled=1              "Smarter tab line: 显示窗口tab和buffer
+"let g:airline#extensions#tabline#buffer_nr_show=1              "Smarter tab line: 显示窗口tab和buffer
+
+let g:airline#extensions#tabline#formatter = 'unique_tail'  "formater
+"let g:airline#extensions#whitespace#symble = '!'
+"let g:airline#extensions#tabline#left_sep = ' '         "separater
+"let g:airline#extensions#tabline#left_alt_sep = '|'     "separater
 "
-"}}}
+"
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
 
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.readonly = '⭤'
+let g:airline_symbols.linenr = '⭡'
+" }}}
 
-" NERDTree {{{
-nnoremap <leader>t :NERDTreeToggle<CR>
+" @NERDTree {{{
+"map <leader>t :NERDTreeMirror<CR>
+map <leader>t :NERDTreeToggle<CR>
+
 " Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
 " }}}
+
+" @cocnvim {{{
+set hidden   " vim在文件未保存的情况下,不允许文件跳转,添加这个设置可以让vim允许跳转
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+" cocnvim检查的语法报错问题,和行号共用同一栏位
+"if has("nvim-0.5.0") || has("patch-8.1.1564")
+"  " Recently vim can merge signcolumn and number column into one
+"  set signcolumn=number
+"else
+"  set signcolumn=yes
+"endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+" 使用回车选择补全, 不换行
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" GoTo code navigation.
+nmap <silent> <leader>d <Plug>(coc-definition)
+"nmap <silent> <leader>y <Plug>(coc-type-definition)
+"nmap <silent> <leader>i <Plug>(coc-implementation)
+"nmap <silent> <leader>r <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> <leader>h :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+" }}}
+
+
