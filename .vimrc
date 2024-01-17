@@ -139,7 +139,26 @@ map <right> :vertical resize+5<CR>
 
 map <leader>x :bnext<CR>
 map <leader>z :bprev<CR>
+
+
 " }}}
+
+" alias {{{
+"Hot key for comments
+ab ccc   //-----------------------------------------------------------------------------------
+ab ccl*  *************************************************************************************
+ab ccl=  =====================================================================================
+ab ccl#  #------------------------------------------------------------------------------------
+ab ccl+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ab ccl-  -------------------------------------------------------------------------------------
+ab ccs   //-------------------------------------
+ab cc+   +++++++++++++++++++++++++++++++++++++++
+ab cc=   =======================================
+ab cc*   ***************************************
+ab cc-   ---------------------------------------
+ab cc#   #--------------------------------------
+" }}}
+
 
 " 添加作者信息 {{{
 "第一部分
@@ -196,21 +215,35 @@ endfunction
 
 " }}}
 
-" alias {{{
-"Hot key for comments
-ab ccc   //-----------------------------------------------------------------------------------
-ab ccl*  *************************************************************************************
-ab ccl=  =====================================================================================
-ab ccl#  #------------------------------------------------------------------------------------
-ab ccl+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-ab ccl-  -------------------------------------------------------------------------------------
-ab ccs   //-------------------------------------
-ab cc+   +++++++++++++++++++++++++++++++++++++++
-ab cc=   =======================================
-ab cc*   ***************************************
-ab cc-   ---------------------------------------
-ab cc#   #--------------------------------------
-" }}}
+" Align Function {{{
+command! -range Align <line1>,<line2>call AlignCode(<line1>,<line2>)
+vnoremap <leader>a :Align<cr>
+
+function! AlignCode(line1,line2) range
+    let start_line = a:line1
+    let end_line = a:line2
+
+    let align_char = input('Enter character to align: ')
+
+    let max_length = 0
+    for i in range(start_line, end_line)
+        let line = getline(i)
+        let index = stridx(line, align_char)
+        if index > max_length
+            let max_length = index
+        endif
+    endfor
+
+    for i in range(start_line, end_line)
+        let line = getline(i)
+        let index = stridx(line, align_char)
+        if index >= 0
+            let spaces = repeat(' ', max_length - index)
+            let line = substitute(line, align_char, spaces.align_char, '')
+            call setline(i, line)
+        endif
+    endfor
+endfunction
 
 
 "  functions {{{
@@ -218,8 +251,6 @@ ab cc#   #--------------------------------------
 " the current file. For example, while editing file /some/path/myfile.txt,
 " typing: e %%/ on the command line will expand to :e /some/path/.
 cabbr <expr> %% expand('%:p:h') 
-
-
 
 "Self-defined function Cnt_match to count and show the matched search_wd
 function Cnt_match(search_wd)
