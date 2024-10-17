@@ -68,10 +68,11 @@ let $LANG = 'en_US.UTF-8'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " GUI {{{
 " 设置主题格式
-colorscheme tender
+"colorscheme tender
+colorscheme solarized
 "colorscheme gruvbox
 "set guifont=Courier_New:h13
-set guifont=Inconsolata:h13
+"set guifont=Inconsolata:h13
 
 " 解决菜单乱码问题
 source $VIMRUNTIME/delmenu.vim
@@ -101,7 +102,7 @@ set splitright
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 优化设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"{{{
+"{{{ mapping
 let mapleader = " "         "设置leader键
 inoremap jk <Esc>
 
@@ -122,8 +123,8 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 " 切换buffer
-nnoremap <M-h> :bprev<cr>
-nnoremap <M-l> :bnext<cr>
+"nnoremap <M-h> :bprev<cr>
+"nnoremap <M-l> :bnext<cr>
 " 插入模式移动光标 alt + 方向键
 "inoremap <M-j> <Down>
 "inoremap <M-k> <Up>
@@ -131,10 +132,10 @@ nnoremap <M-l> :bnext<cr>
 "inoremap <M-l> <Right>
 
 " 修改分屏大小
-map <up> :res +5<CR>
-map <down> :res -5<CR>
-map <left> :vertical resize-5<CR>
-map <right> :vertical resize+5<CR>
+"map <up> :res +5<CR>
+"map <down> :res -5<CR>
+"map <left> :vertical resize-5<CR>
+"map <right> :vertical resize+5<CR>
 
 
 map <leader>x :bnext<CR>
@@ -163,7 +164,7 @@ ab cc#   #--------------------------------------
 " 添加作者信息 {{{
 "第一部分
 "将键盘上的F4功能键映射为添加作者信息的快捷键
-map <leader>a ms:call TitleDet()<cr>'s
+map <F4> ms:call TitleDet()<cr>'s
 function AddTitle()
     call append(0,"##############################################")
     call append(1,"#")
@@ -244,9 +245,9 @@ function! AlignCode(line1,line2) range
         endif
     endfor
 endfunction
+"}}}
 
-
-"  functions {{{
+"  user defined functions {{{
 " this abbreviation %% expands to the full path of the directory that contains
 " the current file. For example, while editing file /some/path/myfile.txt,
 " typing: e %%/ on the command line will expand to :e /some/path/.
@@ -293,69 +294,33 @@ endfunction;
 
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vundle插件设置  使用 :PluginInstall即可安装列表中的插件
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vundle插件环境设置 {{{
-filetype off
-set rtp+=~/vimfiles/bundle/Vundle.vim
 
-call vundle#rc('~/vimfiles/bundle/')
-" vundle管理的插件列表必须位于vundle#begin()和vundle#end()之间
-call vundle#begin()
-" 插件管理插件
-Plugin 'VundleVim/Vundle.vim'
-" 主题
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'jacoborus/tender.vim'
-Plugin 'morhetz/gruvbox'
+" vim-plug settings {{{
+call plug#begin()
 
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+" List your plugins here
+"Plug 'tpope/vim-sensible'
 
-Plugin 'scrooloose/nerdtree'
-Plugin 'neoclide/coc.nvim'
-Plugin 'honza/vim-snippets'
+" Themes
+"Plug 'altercation/vim-colors-solarized'
+"Plug 'jacoborus/tender.vim'
+"Plug 'morhetz/gruvbox'
+"
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'scrooloose/nerdtree'
+"Plugin 'neoclide/coc.nvim'
+"Plugin 'honza/vim-snippets'
 " git plugins
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'junegunn/gv.vim'
-" 插件列表结束
-call vundle#end()
-filetype plugin indent on
-" }}}
+"Plugin 'airblade/vim-gitgutter'
+"Plugin 'tpope/vim-fugitive'
+"Plugin 'junegunn/gv.vim'
 
+call plug#end()
 
-" @airline{{{
+"}}}
 
-
-set t_Co=256      "在windows中用xshell连接打开vim可以显示色彩
-"这个是安装字体后 必须设置此项" 
-set guifont=Consolas_for_Powerline_FixedD:h13:cANSI:qDRAFT
-let g:airline_powerline_fonts = 1
-set laststatus=2  "永远显示状态栏
-let g:airline_theme='bubblegum' "选择主题
-let g:airline#extensions#tabline#enabled=1              "Smarter tab line: 显示窗口tab和buffer
-"let g:airline#extensions#tabline#buffer_nr_show=1              "Smarter tab line: 显示窗口tab和buffer
-
-let g:airline#extensions#tabline#formatter = 'unique_tail'  "formater
-"let g:airline#extensions#whitespace#symble = '!'
-"let g:airline#extensions#tabline#left_sep = ' '         "separater
-"let g:airline#extensions#tabline#left_alt_sep = '|'     "separater
-"
-"
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'
-let g:airline_right_alt_sep = '⮃'
-let g:airline_symbols.branch = '⭠'
-let g:airline_symbols.readonly = '⭤'
-let g:airline_symbols.linenr = '⭡'
-" }}}
 
 " @NERDTree {{{
 "map <leader>t :NERDTreeMirror<CR>
@@ -366,63 +331,6 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTa
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
-" }}}
-
-" @cocnvim {{{
-set hidden   " vim在文件未保存的情况下,不允许文件跳转,添加这个设置可以让vim允许跳转
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-" cocnvim检查的语法报错问题,和行号共用同一栏位
-"if has("nvim-0.5.0") || has("patch-8.1.1564")
-"  " Recently vim can merge signcolumn and number column into one
-"  set signcolumn=number
-"else
-"  set signcolumn=yes
-"endif
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-" 使用回车选择补全, 不换行
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" GoTo code navigation.
-nmap <silent> <leader>d <Plug>(coc-definition)
-"nmap <silent> <leader>y <Plug>(coc-type-definition)
-"nmap <silent> <leader>i <Plug>(coc-implementation)
-"nmap <silent> <leader>r <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> <leader>h :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
 " }}}
 
 

@@ -78,7 +78,8 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
 " 窗口大小
-set lines=50 columns=140
+
+"set lines=50 columns=140
 "winpos 700 100
 " 分割出来的窗口位于当前窗口下边/右边
 set splitbelow
@@ -109,6 +110,12 @@ nnoremap <leader>e :e $MYVIMRC<cr>
 nnoremap <leader>r :source $MYVIMRC<cr>
 nnoremap sp :sp<cr>
 nnoremap vs :vs<cr>
+
+nnoremap H ^
+nnoremap L $
+omap H ^
+omap L $
+
 " 快速切换窗口
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -128,6 +135,10 @@ map <up> :res +5<CR>
 map <down> :res -5<CR>
 map <left> :vertical resize-5<CR>
 map <right> :vertical resize+5<CR>
+
+
+map <leader>x :bnext<CR>
+map <leader>z :bprev<CR>
 " }}}
 
 " 添加作者信息 {{{
@@ -252,6 +263,12 @@ let g:airline_symbols.linenr = '⭡'
 " @NERDTree {{{
 "map <leader>t :NERDTreeMirror<CR>
 map <leader>t :NERDTreeToggle<CR>
+
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
 " }}}
 
 " @cocnvim {{{
